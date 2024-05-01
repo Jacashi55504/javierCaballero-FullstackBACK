@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler')
-const Product = require('../models/productModel')
+const Product = require('../models/productModels')
 
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find();
@@ -38,7 +38,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Producto no encontrado')
     }
-    await product.remove();
+    await product.deleteOne();
     res.status(200).json({message: `Producto eliminado: ${req.params.id}`})
 })
 
