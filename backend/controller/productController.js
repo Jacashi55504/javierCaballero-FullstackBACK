@@ -1,13 +1,13 @@
-const asyncHandler = require('express-async-handler')
-const Product = require('../models/productModels')
+const asyncHandler = require('express-async-handler');
+const Product = require('../models/productModel');
 
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find();
     res.status(200).json(products);
-})
+});
 
 const createProduct = asyncHandler(async (req, res) => {
-    if (!req.body.name || !req.body.description || req.body.price == null) { // Check for missing data
+    if (!req.body.name || !req.body.description || req.body.price == null) {
         res.status(400);
         throw new Error("Por favor completa todos los campos requeridos.");
     }
@@ -15,32 +15,30 @@ const createProduct = asyncHandler(async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
-        inStock: req.body.inStock // Add in stock
+        inStock: req.body.inStock
     });
-    
-    res.status(201).json(product)
-})
+    res.status(201).json(product);
+});
 
 const updateProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params.id);
     if (!product) {
-        res.status(404)
+        res.status(404);
         throw new Error('Producto no encontrado');
     }
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    res.status(200).json(updatedProduct)
-})
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedProduct);
+});
 
 const deleteProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id)
-    if (!product) { // check for product validation
-
-        res.status(404)
-        throw new Error('Producto no encontrado')
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        res.status(404);
+        throw new Error('Producto no encontrado');
     }
     await product.deleteOne();
-    res.status(200).json({message: `Producto eliminado: ${req.params.id}`})
-})
+    res.status(200).json({ message: `Producto eliminado: ${req.params.id}` });
+});
 
 module.exports = {
     getProducts,
